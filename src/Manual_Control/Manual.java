@@ -6,7 +6,7 @@ public class Manual {
 	public static void main(String[] args) {
 		
 		Testable example = new Testable();
-		double test = example.AreaRectangle(2.0, 4.0);
+		double test = example.Power(3.0,3.0);
 		System.out.println(test);
 	}
 
