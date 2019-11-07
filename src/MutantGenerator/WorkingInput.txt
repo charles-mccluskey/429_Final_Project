@@ -1,0 +1,58 @@
+package ToMutate;
+
+import java.util.Scanner;
+
+public class Original {
+
+	public static void main(String[] args) {
+		Scanner reader = new Scanner(System.in);
+		System.out.println("input two ints");
+		int a = reader.nextInt();
+		int b = reader.nextInt();
+		String input = reader.nextLine();
+		int result;
+		while(true) {
+			if(input.contentEquals("ADD")) {
+				result = add(a,b);
+				break;
+			}else if(input.contentEquals("SUBTRACT")) {
+				result = subtract(a,b);
+				break;
+			}else if(input.contentEquals("MULTIPLY")) {
+				result = multiply(a,b);
+				break;
+			}else if(input.contentEquals("DIVIDE")) {
+				result = divide(a,b);
+				break;
+			}else if(input.contentEquals("DOTHING")){
+				result = doThing(a,b);
+				break;
+			}else {
+				System.out.println("Please provide valid input.");
+				System.out.println("ADD;SUBTRACT;MULTIPLY;DIVIDE;DOTHING");
+				input = reader.nextLine();
+			}
+		}
+		System.out.println(result);
+	}
+	
+	private static int add(int a, int b) {
+		return a+b;
+	}
+
+	private static int subtract(int a, int b) {
+		return a-b;
+	}
+	
+	private static int multiply(int a, int b) {
+		return a*b;
+	}
+	
+	private static int divide(int a, int b) {
+		return a/b;
+	}
+	
+	private static int doThing(int a, int b){
+		return a+b*a-b/a;
+	}
+}
