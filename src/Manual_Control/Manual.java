@@ -8,7 +8,7 @@ public class Manual {
 		
 		String input = System.getProperty("user.dir")+"/src/SUT/Testable.java";
 		MutantGenerator generator = new MutantGenerator();
-		generator.GenerateMutantList(input);
+		generator.GenerateMutants(input);
 	}
 
 }

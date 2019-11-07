@@ -11,7 +11,7 @@ public class MutantGenerator {
 		
 	}
 
-	public static void GenerateMutantList(String input) {
+	public static void GenerateMutants(String input) {
 		BufferedReader reader;
 		//String input = System.getProperty("user.dir")+"/src/MutantGenerator/WorkingInput.txt";
 		Boolean mutants=false;
@@ -37,7 +37,7 @@ public class MutantGenerator {
 										//generate a mutant line
 										mutationBuilder.setCharAt(i, operations[m]);
 										//append the output line with our mutant
-										lineBuilder.append(" "+mutationBuilder.toString().trim());
+										lineBuilder.append(mutationBuilder.toString());
 										//augment mutation counter
 										mutantCounter[m]++;
 									}
@@ -58,11 +58,71 @@ public class MutantGenerator {
 				lineBuilder.delete(0, lineBuilder.length());//clear the line builder
 			}
 
-			for(int i=0;i<operations.length;i++) {
+			/*for(int i=0;i<operations.length;i++) {
 				printWriter.println("Number of "+operations[i]+" mutants: "+mutantCounter[i]);
-			}
+			}*/
+			reader.close();
 			printWriter.close();
+			for(int i=0;i<mutantCounter.length;i++) {
+				mutantCounter[i]=0;
+			}
+			MutateCode(input, outputFile);
 		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public static void MutateCode(String input, String outputFile) {
+		int numMutantFiles=1;
+		BufferedReader mutantReader;
+		try {
+			mutantReader = new BufferedReader(new FileReader(outputFile));
+			String mutantLine = mutantReader.readLine();
+			while(mutantLine != null) {//cycle through the mutant list
+
+				//retrieve the line to mutate
+				String[] mutLine = mutantLine.split("]");//split the line to get "[XX"
+				StringBuilder x = new StringBuilder(mutLine[0]);//turn it into stringBuilder
+				x.deleteCharAt(0);//delete [ to get XX
+				int line = Integer.parseInt(x.toString());//retrieve the line number
+				
+				String[] mutants = mutantLine.split(";");//use ; to split the mutants. NEED TO RE-ADD THEM
+				int numMutants = mutants.length;
+				
+				for(int i=1;i<numMutants;i++) {//start offset since index 0 is original line
+					BufferedReader codeReader = new BufferedReader(new FileReader(input));
+					String codeLine="";
+					//Now to set up the new mutated file
+					String output = System.getProperty("user.dir")+"/src/SUT/Mutant"+numMutantFiles+".java";
+					FileWriter fileWriter = new FileWriter(output);
+					PrintWriter printWriter = new PrintWriter(fileWriter);
+			    
+					//write lines up to and NOT including the mutant
+					for(int j=1;j<line;j++) {
+						codeLine=codeReader.readLine();
+						printWriter.println(codeLine);
+					}
+					
+					//read mutant line to skip it
+					codeReader.readLine();
+					
+					//inject Mutant
+					printWriter.println(mutants[i]+";"+"//MUTANT LINE");
+					
+					//write the rest of the file
+					while(codeLine!=null) {
+						codeLine=codeReader.readLine();
+						printWriter.println(codeLine);
+					}//mutated file should be complete.
+
+					numMutantFiles++;//up the mutant counter for naming the files
+					printWriter.close();//and CLOSE THE DAMN READERS SO THEY RESET FOR THE NEXT GO AROUND
+					codeReader.close();
+				}
+				//Get the next set of mutants
+				mutantLine = mutantReader.readLine();
+			}
+		}catch (IOException e){
 			e.printStackTrace();
 		}
 	}

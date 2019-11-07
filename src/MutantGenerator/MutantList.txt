@@ -1,8 +1,4 @@
-[10] double result = a*b; double result = a+b; double result = a-b; double result = a/b;
-[15] double result = radius*radius*Math.PI; double result = radius+radius*Math.PI; double result = radius-radius*Math.PI; double result = radius/radius*Math.PI; double result = radius*radius+Math.PI; double result = radius*radius-Math.PI; double result = radius*radius/Math.PI;
-[20] double result = 2*radius*Math.PI; double result = 2+radius*Math.PI; double result = 2-radius*Math.PI; double result = 2/radius*Math.PI; double result = 2*radius+Math.PI; double result = 2*radius-Math.PI; double result = 2*radius/Math.PI;
-[33] answer += increment; answer -= increment; answer *= increment; answer /= increment;
-Number of + mutants: 5
-Number of - mutants: 6
-Number of * mutants: 1
-Number of / mutants: 6
+[10] double result = a*b;		double result = a+b;		double result = a-b;		double result = a/b;
+[15] double result = radius*radius*Math.PI;		double result = radius+radius*Math.PI;		double result = radius-radius*Math.PI;		double result = radius/radius*Math.PI;		double result = radius*radius+Math.PI;		double result = radius*radius-Math.PI;		double result = radius*radius/Math.PI;
+[20] double result = 2*radius*Math.PI;		double result = 2+radius*Math.PI;		double result = 2-radius*Math.PI;		double result = 2/radius*Math.PI;		double result = 2*radius+Math.PI;		double result = 2*radius-Math.PI;		double result = 2*radius/Math.PI;
+[33] answer += increment;	                answer -= increment; 	                answer *= increment; 	                answer /= increment; 
