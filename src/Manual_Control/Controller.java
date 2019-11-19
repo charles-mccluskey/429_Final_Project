@@ -2,7 +2,7 @@ package Manual_Control;
 import SUT.Testable;
 import MutantGenerator.MutantGenerator;
 
-public class Manual {
+public class Controller {
 
 	public static void main(String[] args) {
 		

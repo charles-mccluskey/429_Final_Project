@@ -28,7 +28,8 @@ public class MutantGenerator {
 				for(int i=0;i<line.length();i++) {//scan the chars of the line for operations
 					for(int o=0;o<operations.length;o++) {//cycle through the operations for each character
 						if(line.charAt(i)==operations[o]) {//if the char is an operator
-							if(line.charAt(i+1)!=operations[o]) {//if the operator isn't doubled up like ++ or --
+							if(line.charAt(i+1)!=operations[o] && !(line.charAt(i)=='/'&&line.charAt(i+1)=='*') && !(line.charAt(i)=='*'&&line.charAt(i+1)=='/')) {
+								//if the operator isn't doubled up like ++, --, //, and is not an open or close comment
 								//Then we need to generate mutations
 								mutants=true;
 								StringBuilder mutationBuilder = new StringBuilder(line); //start with basic string
@@ -76,6 +77,10 @@ public class MutantGenerator {
 		int numMutantFiles=1;
 		BufferedReader mutantReader;
 		try {
+			//retrieve the class name
+			String className = input.split("/")[input.split("/").length-1];
+			className = className.substring(0,className.lastIndexOf("."));
+			
 			mutantReader = new BufferedReader(new FileReader(outputFile));
 			String mutantLine = mutantReader.readLine();
 			while(mutantLine != null) {//cycle through the mutant list
@@ -93,13 +98,23 @@ public class MutantGenerator {
 					BufferedReader codeReader = new BufferedReader(new FileReader(input));
 					String codeLine="";
 					//Now to set up the new mutated file
-					String output = System.getProperty("user.dir")+"/src/SUT/Mutant"+numMutantFiles+".java";
+					String output = System.getProperty("user.dir")+"/src/Mutants/Mutant"+numMutantFiles+".java";
 					FileWriter fileWriter = new FileWriter(output);
 					PrintWriter printWriter = new PrintWriter(fileWriter);
 			    
+					//replace package line
+					codeLine=codeReader.readLine();
+					printWriter.println("package Mutants;");
+					
 					//write lines up to and NOT including the mutant
-					for(int j=1;j<line;j++) {
+					for(int j=1;j<line-1;j++) {
 						codeLine=codeReader.readLine();
+						if(codeLine.contains(className)) {
+							String newClass = "Mutant"+numMutantFiles;
+							System.out.println(codeLine);
+							System.out.println(className);
+							codeLine=codeLine.replaceFirst(className, newClass);
+						}
 						printWriter.println(codeLine);
 					}
 					
@@ -112,6 +127,9 @@ public class MutantGenerator {
 					//write the rest of the file
 					while(codeLine!=null) {
 						codeLine=codeReader.readLine();
+						if(codeLine==null) {
+							break;
+						}
 						printWriter.println(codeLine);
 					}//mutated file should be complete.
 
