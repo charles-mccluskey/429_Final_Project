@@ -11,12 +11,21 @@ public class MutantGenerator {
 		
 	}
 
-	public static void GenerateMutants(String input) {
+	public void GenerateMutants(String directory) {
 		BufferedReader reader;
-		//String input = System.getProperty("user.dir")+"/src/MutantGenerator/WorkingInput.txt";
 		Boolean mutants=false;
 		try{
-			reader = new BufferedReader(new FileReader(input));//prep the input file
+			File folder = new File(directory);
+			String[] files = folder.list();
+			String fileName = "";
+			for(int i=0;i<files.length;i++) {
+				if(files[i].contains(".java")) {
+					fileName=files[i];
+					break;
+				}
+			}
+			
+			reader = new BufferedReader(new FileReader(directory+fileName));//prep the input file
 			String line = reader.readLine();
 			String outputFile = System.getProperty("user.dir")+"/src/MutantGenerator/MutantList.txt";
 		    FileWriter fileWriter = new FileWriter(outputFile);//prep the output file
@@ -67,19 +76,18 @@ public class MutantGenerator {
 			for(int i=0;i<mutantCounter.length;i++) {
 				mutantCounter[i]=0;
 			}
-			MutateCode(input, outputFile);
+			MutateCode(directory, outputFile, fileName);
 		} catch (IOException e){
 			e.printStackTrace();
 		}
 	}
 	
-	public static void MutateCode(String input, String outputFile) {
+	public static void MutateCode(String directory, String outputFile, String fileName) {
 		int numMutantFiles=1;
 		BufferedReader mutantReader;
 		try {
 			//retrieve the class name
-			String className = input.split("/")[input.split("/").length-1];
-			className = className.substring(0,className.lastIndexOf("."));
+			String className = fileName.substring(0,fileName.lastIndexOf("."));
 			
 			mutantReader = new BufferedReader(new FileReader(outputFile));
 			String mutantLine = mutantReader.readLine();
@@ -95,7 +103,7 @@ public class MutantGenerator {
 				int numMutants = mutants.length;
 				
 				for(int i=1;i<numMutants;i++) {//start offset since index 0 is original line
-					BufferedReader codeReader = new BufferedReader(new FileReader(input));
+					BufferedReader codeReader = new BufferedReader(new FileReader(directory+fileName));
 					String codeLine="";
 					//Now to set up the new mutated file
 					String output = System.getProperty("user.dir")+"/src/Mutants/Mutant"+numMutantFiles+".java";
@@ -111,8 +119,6 @@ public class MutantGenerator {
 						codeLine=codeReader.readLine();
 						if(codeLine.contains(className)) {
 							String newClass = "Mutant"+numMutantFiles;
-							System.out.println(codeLine);
-							System.out.println(className);
 							codeLine=codeLine.replaceFirst(className, newClass);
 						}
 						printWriter.println(codeLine);
