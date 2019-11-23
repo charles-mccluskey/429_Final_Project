@@ -1,0 +1,4 @@
+AreaRectangle, 25.0, 6.0
+AreaCircle, 30.0
+Circumference, 67.0
+Power, 7.0, 5.0
