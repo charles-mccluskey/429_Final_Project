@@ -54,38 +54,35 @@ public class Tester {
 				method=simReader.readLine();
 				counter++;
 			}
-
+			simReader.close();
+			
 			//now to run the SUT and note the results
+			ArrayList<String> results = new ArrayList<String>();
 			int mutantsKilled=0;
 			CompilingClassLoader sccl = new CompilingClassLoader(sutDirectory);
-			Class sut = sccl.loadClass("SUT."+sutName);
-
+			Class<?> sut = sccl.loadClass("SUT."+sutName);
+			ArrayList<Method> sutMethods = retrieveMethods(sut,simMethods);
+			//iterate through methods
+			for(int i=0;i<sutMethods.size();i++) {
+				//get method parameter types
+				Class<?>[] params = sutMethods.get(i).getParameterTypes();
+				Object[] args = new Object[params.length];
+				for(int j=0;j<inputs.get(i).size();j++) {
+					args[j] = params[j].getConstructor(String.class).newInstance(inputs.get(i).get(j))//(inputs.get(i).get(j));
+				}
+				//we have the arguments, now we invoke the method
+				System.out.println(sutMethods.get(i).invoke(sut.newInstance(), args));
+			}
+			
 			
 			//compile and run a single mutant file
 			CompilingClassLoader mccl = new CompilingClassLoader(mutantDirectory);
-			Class mutant = mccl.loadClass("Mutants."+mutants[0]);//mutant compiled, we can now work with it
-			
-			//retrieve the class's methods into an unsorted array list. For some reason, these come out randomized...
-			Method[] allMethods = mutant.getMethods();
-			ArrayList<Method> unsortedMethods = new ArrayList<Method>();
-			Method test = mutant.getMethod("AreaRectangle", double.class, double.class);
-			System.out.println(test.invoke(mutant.newInstance(), 4.0, 5.0));
-			for(int i=0;i<allMethods.length;i++) {
-				if(allMethods[i].getName().contentEquals("wait")) {
-					break;
-				}
-				unsortedMethods.add(allMethods[i]);
-			}
-			//now sort them into a different arraylist
-			ArrayList<Method> methods = new ArrayList<Method>();
-			for(int i=0;i<simMethods.size();i++) {
-				for(int j=0;j<unsortedMethods.size();j++) {
-					if(unsortedMethods.get(j).getName().contentEquals(simMethods.get(i))) {
-						methods.add(unsortedMethods.get(j));
-					}
-				}
-			}
-			//Method objects are now sorted according to the simulation file
+			Class<?> mutant = mccl.loadClass("Mutants."+mutants[0]);//mutant compiled, we can now work with it
+			//Method test = mutant.getMethod("AreaRectangle", double.class, double.class);
+			//System.out.println(test.invoke(mutant.newInstance(), 4.0, 5.0));
+
+			//retrieve mutant's methods
+			ArrayList<Method> methods = retrieveMethods(mutant, simMethods);
 			//Now to run methods and compare them against the SUT
 			for(int i=0;i<methods.size();i++) {
 			//	methods.get(i).invoke(mutant.newInstance(), );
@@ -115,11 +112,30 @@ public class Tester {
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
+	private static ArrayList<Method> retrieveMethods(Class<?> clas, ArrayList<String> simMethods) {
+		//retrieve the class's methods into an unsorted array list. For some reason, these come out randomized...
+		Method[] allMethods = clas.getMethods();
+		ArrayList<Method> unsortedMethods = new ArrayList<Method>();
+		for(int i=0;i<allMethods.length;i++) {
+			if(allMethods[i].getName().contentEquals("wait")) {
+				break;
+			}
+			unsortedMethods.add(allMethods[i]);
+		}
+		//now sort them into a different arraylist
+		ArrayList<Method> methods = new ArrayList<Method>();
+		for(int i=0;i<simMethods.size();i++) {
+			for(int j=0;j<unsortedMethods.size();j++) {
+				if(unsortedMethods.get(j).getName().contentEquals(simMethods.get(i))) {
+					methods.add(unsortedMethods.get(j));
+				}
+			}
+		}
+		//Method objects are now sorted according to the simulation file
+		return methods;
+	}
 	
 }
