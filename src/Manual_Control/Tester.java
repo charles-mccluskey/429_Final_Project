@@ -40,14 +40,14 @@ public class Tester {
 		    //retrieve a string array list representing the order of methods in our simulation file
 			//retrieve the sim file inputs and put into 2d array list
 		    ArrayList<String> simMethods = new ArrayList<String>();
-		    ArrayList<ArrayList<Object>> inputs = new ArrayList<ArrayList<Object>>();
+		    ArrayList<ArrayList<String>> inputs = new ArrayList<ArrayList<String>>();
 			BufferedReader simReader = new BufferedReader(new FileReader(System.getProperty("user.dir")+"/src/Manual_Control/Simulation.txt"));
 			String method = simReader.readLine();
 			int counter=0;
 			while(method!=null) {
 				String[] line = method.split(",");
 				simMethods.add(line[0]);
-				inputs.add(new ArrayList<Object>());
+				inputs.add(new ArrayList<String>());
 				for(int i=1;i<line.length;i++) {
 					inputs.get(counter).add(line[i].trim());
 				}
@@ -64,11 +64,11 @@ public class Tester {
 			ArrayList<Method> sutMethods = retrieveMethods(sut,simMethods);
 			//iterate through methods
 			for(int i=0;i<sutMethods.size();i++) {
-				//get method parameter types
+				//get method parameters
 				Class<?>[] params = sutMethods.get(i).getParameterTypes();
 				Object[] args = new Object[params.length];
 				for(int j=0;j<inputs.get(i).size();j++) {
-					args[j] = params[j].getConstructor(String.class).newInstance(inputs.get(i).get(j))//(inputs.get(i).get(j));
+					args[j] = casting(params[j],(inputs.get(i).get(j)));//;
 				}
 				//we have the arguments, now we invoke the method
 				System.out.println(sutMethods.get(i).invoke(sut.newInstance(), args));
@@ -112,6 +112,24 @@ public class Tester {
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	//example input: double, 2.0
+	@SuppressWarnings("unchecked")
+	private static Object casting(Class clas, String val) throws IllegalArgumentException {
+		if(clas.isAssignableFrom(double.class)) {
+			return (double) new Double(val);
+		}else if(clas.isAssignableFrom(int.class)) {
+			return (int) new Integer(val);
+		}else if(clas.isAssignableFrom(float.class)) {
+			return (float) new Float(val);
+		}else if(clas.isAssignableFrom(long.class)) {
+			return (long) new Long(val);
+		}else if(clas.isAssignableFrom(short.class)) {
+			return (short) new Short(val);
+		}else {
+			throw new IllegalArgumentException("Unsupported inputs.");
 		}
 	}
 	
