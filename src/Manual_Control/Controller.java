@@ -5,6 +5,7 @@ import MutantGenerator.MutantGenerator;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 
 
 public class Controller{
@@ -14,6 +15,8 @@ public class Controller{
 		String sutDirectory = System.getProperty("user.dir")+"/src/SUT";
 		String mutantDirectory = System.getProperty("user.dir")+"/src/Mutants";
 		File mutantFolder = new File(mutantDirectory);
+		//create the directory if it doesn't exist already
+		if (!mutantFolder.exists()) Files.createDirectory(mutantFolder.toPath());
 		
 		//Before starting, make sure the mutant directory is EMPTY
 		String[] mutantFileNames = mutantFolder.list();
