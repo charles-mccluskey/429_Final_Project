@@ -30,9 +30,7 @@ public class Controller{
                 }
             }
         }
-		
 
-		
 		//Now generate a fresh set of mutants based on the current SUT
 		MutantGenerator generator = new MutantGenerator();
 		generator.GenerateMutants(sutDirectory);

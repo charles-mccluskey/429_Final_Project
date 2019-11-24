@@ -5,6 +5,11 @@ public class Testable {
 	public Testable() {
 		
 	}
+
+	public double alwaysSameReturn(double a) {
+		double b = a + 9;
+		return 5.0;
+	}
 	
 	public double AreaRectangle(double a, double b) {
 		double result = a*b;

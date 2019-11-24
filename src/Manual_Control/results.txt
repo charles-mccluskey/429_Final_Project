@@ -1,2 +1,5 @@
+Mutant1 survived the test
+Mutant3 survived the test
+Mutant2 survived the test
 
-19 out of 19 mutants were killed.
+19 out of 22 mutants were killed.

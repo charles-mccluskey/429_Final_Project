@@ -1,4 +1,5 @@
-[10] double result = a*b;		double result = a+b;		double result = a-b;		double result = a/b;
-[15] double result = radius*radius*Math.PI;		double result = radius+radius*Math.PI;		double result = radius-radius*Math.PI;		double result = radius/radius*Math.PI;		double result = radius*radius+Math.PI;		double result = radius*radius-Math.PI;		double result = radius*radius/Math.PI;
-[20] double result = 2*radius*Math.PI;		double result = 2+radius*Math.PI;		double result = 2-radius*Math.PI;		double result = 2/radius*Math.PI;		double result = 2*radius+Math.PI;		double result = 2*radius-Math.PI;		double result = 2*radius/Math.PI;
-[33] answer += increment;	                answer -= increment; 	                answer *= increment; 	                answer /= increment; 
+[10] double b = a + 9;		double b = a - 9;		double b = a * 9;		double b = a / 9;
+[15] double result = a*b;		double result = a+b;		double result = a-b;		double result = a/b;
+[20] double result = radius*radius*Math.PI;		double result = radius+radius*Math.PI;		double result = radius-radius*Math.PI;		double result = radius/radius*Math.PI;		double result = radius*radius+Math.PI;		double result = radius*radius-Math.PI;		double result = radius*radius/Math.PI;
+[25] double result = 2*radius*Math.PI;		double result = 2+radius*Math.PI;		double result = 2-radius*Math.PI;		double result = 2/radius*Math.PI;		double result = 2*radius+Math.PI;		double result = 2*radius-Math.PI;		double result = 2*radius/Math.PI;
+[38] answer += increment;	                answer -= increment; 	                answer *= increment; 	                answer /= increment; 
