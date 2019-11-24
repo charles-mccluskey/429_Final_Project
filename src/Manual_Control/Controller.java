@@ -16,9 +16,13 @@ public class Controller{
 		File mutantFolder = new File(mutantDirectory);
 		
 		//Before starting, make sure the mutant directory is EMPTY
-		if(mutantFolder.list().length!=0) {
-			for(File mutant: mutantFolder.listFiles()) {
-				mutant.delete();
+		String[] mutantFileNames = mutantFolder.list();
+		if(mutantFileNames != null && mutantFileNames.length != 0) {
+			File[] mutantFiles = mutantFolder.listFiles();
+			if (mutantFiles != null) {
+				for(File mutant: mutantFiles) {
+					mutant.delete();
+				}
 			}
 		}
 		

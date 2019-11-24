@@ -19,7 +19,7 @@ public class CompilingClassLoader extends ClassLoader {
     }
 
     private byte[] loadClassFromFile(String name) throws ClassNotFoundException {
-        String[] splitName = name.split(".");
+        String[] splitName = name.split("\\.");
         String fileName = splitName[splitName.length - 1];
         compileJavaClass(fileDirectory +File.separator+fileName+".java");
         File f = new File(fileDirectory +File.separator+fileName+".class");
