@@ -10,26 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Tester {
-
+    private static final String USER_DIR = System.getProperty("user.dir");
 	//the number of mutants that have been killed, should only be updated with incMutantsKilled()
 	private static int mutantsKilled = 0;
+
+	private Tester() {}//prevents instancing this class
 
 	private static synchronized void incMutantsKilled() {
 		mutantsKilled++;
 	}
 
 	static void testSUT(String sutDirectory, String mutantDirectory) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException, IOException {
-	
+
 		//to test here: compile a mutant and run a test on the mutated method.
 		//Get mutant files and their names
-		File mutantFolder = new File(System.getProperty("user.dir")+"/src/Mutants");
+		File mutantFolder = new File(USER_DIR +"/src/Mutants");
 		String[] mutantClassFiles = mutantFolder.list();
 		if (mutantClassFiles == null) return;
 		String[] mutantClassNames = new String[mutantClassFiles.length];
 
 		//retrieve the name of the SUT
-		File sutFolder = new File(System.getProperty("user.dir")+"/src/SUT");
+		File sutFolder = new File(USER_DIR +"/src/SUT");
 		String[] x = sutFolder.list();
+		if (x == null) return;
 		String sutName = x[0].substring(0,x[0].lastIndexOf('.'));
 
 		for(int i=0;i<mutantClassFiles.length;i++) {
@@ -40,7 +43,7 @@ class Tester {
 		//retrieve the sim file inputs and put into 2d array list
 		List<String> simMethodNames = new ArrayList<>();
 		List<List<String>> simMethodArguments = new ArrayList<>();
-        try (BufferedReader simReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/src/Manual_Control/Simulation.txt"))) {
+        try (BufferedReader simReader = new BufferedReader(new FileReader(USER_DIR + "/src/Manual_Control/Simulation.txt"))) {
             String method = simReader.readLine();
             int counter = 0;
             while (method != null) {
@@ -91,10 +94,12 @@ class Tester {
             }
         });
         //write final score at end of file
-        resultsFileBuffer.append("Score: ").append(mutantsKilled / mutantClassFiles.length);
+        resultsFileBuffer
+                .append('\n').append(mutantsKilled).append(" out of ").append(mutantClassFiles.length)
+                .append(" mutants were killed.");
 
         //output results
-        File resultsFile = new File(System.getProperty("user.dir") + "/src/Manual_Control/results.txt");
+        File resultsFile = new File(USER_DIR + "/src/Manual_Control/results.txt");
         try (OutputStream resultsOut = Files.newOutputStream(resultsFile.toPath())) {
             resultsOut.write(resultsFileBuffer.toString().getBytes());
         }
@@ -123,7 +128,7 @@ class Tester {
 
     //example input: double, 2.0
 	@SuppressWarnings("unchecked")
-	private static Object casting(Class clas, String val) throws IllegalArgumentException {
+	private static Object casting(Class clas, String val) {
 		if(clas.isAssignableFrom(double.class)) {
 		    return Double.parseDouble(val);
 		}else if(clas.isAssignableFrom(int.class)) {
@@ -138,26 +143,24 @@ class Tester {
 			throw new IllegalArgumentException("Unsupported inputs.");
 		}
 	}
-	
+
+    /**
+     * @param clas A Class of the Software Under Test.
+     * @param simMethods A list of method names to be tested.
+     * @return A List of Method objects in the order they appear in simMethods.
+     */
 	private static List<Method> retrieveMethods(Class<?> clas, List<String> simMethods) {
-		//retrieve the class's methods into an unsorted array list. For some reason, these come out randomized...
-		Method[] allMethods = clas.getDeclaredMethods();
-		ArrayList<Method> unsortedMethods = new ArrayList<Method>();
-		for (Method method : allMethods) {
-			System.out.println(method.getName());
-			unsortedMethods.add(method);
+        //retrieve the class's methods into an unsorted list. For some reason, these come out randomized...
+        Method[] classMethods = clas.getDeclaredMethods();
+		ArrayList<Method> methodsToReturn = new ArrayList<>();
+        //add methods in the order they appear in simMethods
+        for (String simMethod : simMethods) {
+            for (Method classMethod : classMethods) {
+                if (classMethod.getName().contentEquals(simMethod)) {
+                    methodsToReturn.add(classMethod);
+                }
+            }
 		}
-		//now sort them into a different arraylist
-		ArrayList<Method> methods = new ArrayList<Method>();
-		for (String simMethod : simMethods) {
-			for (int j = 0; j < unsortedMethods.size(); j++) {
-				if (unsortedMethods.get(j).getName().contentEquals(simMethod)) {
-					methods.add(unsortedMethods.get(j));
-				}
-			}
-		}
-		//Method objects are now sorted according to the simulation file
-		return methods;
+		return methodsToReturn;
 	}
-	
 }

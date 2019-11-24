@@ -1,0 +1,2 @@
+
+19 out of 19 mutants were killed.
