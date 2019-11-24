@@ -16,18 +16,22 @@ public class Controller{
 		String mutantDirectory = System.getProperty("user.dir")+"/src/Mutants";
 		File mutantFolder = new File(mutantDirectory);
 		//create the directory if it doesn't exist already
-		if (!mutantFolder.exists()) Files.createDirectory(mutantFolder.toPath());
+		if (!mutantFolder.exists()) {
+		    Files.createDirectory(mutantFolder.toPath());
+		} else {
+            //Before starting, make sure the mutant directory is EMPTY
+            String[] mutantFileNames = mutantFolder.list();
+            if(mutantFileNames != null && mutantFileNames.length != 0) {
+                File[] mutantFiles = mutantFolder.listFiles();
+                if (mutantFiles != null) {
+                    for(File mutant: mutantFiles) {
+                        Files.delete(mutant.toPath());
+                    }
+                }
+            }
+        }
 		
-		//Before starting, make sure the mutant directory is EMPTY
-		String[] mutantFileNames = mutantFolder.list();
-		if(mutantFileNames != null && mutantFileNames.length != 0) {
-			File[] mutantFiles = mutantFolder.listFiles();
-			if (mutantFiles != null) {
-				for(File mutant: mutantFiles) {
-					mutant.delete();
-				}
-			}
-		}
+
 		
 		//Now generate a fresh set of mutants based on the current SUT
 		MutantGenerator generator = new MutantGenerator();

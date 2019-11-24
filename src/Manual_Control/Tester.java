@@ -2,7 +2,10 @@ package Manual_Control;
 
 import mutantdetection.CompilingClassLoader;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -100,9 +103,7 @@ class Tester {
 
         //output results
         File resultsFile = new File(USER_DIR + "/src/Manual_Control/results.txt");
-        try (OutputStream resultsOut = Files.newOutputStream(resultsFile.toPath())) {
-            resultsOut.write(resultsFileBuffer.toString().getBytes());
-        }
+        Files.write(resultsFile.toPath(), resultsFileBuffer.toString().getBytes());
 	}
 
     private static List<Object> runSimulation(String simClassName, List<String> simMethodNames,
