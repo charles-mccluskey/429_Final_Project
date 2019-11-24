@@ -1,18 +1,17 @@
-package Manual_Control;
-import SUT.*;
-import MutantGenerator.*;
-import java.io.*;
-import Mutants.*;
-import java.lang.*;
+package manualcontrol;
+
+import MutantGenerator.MutantGenerator;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 
 public class Controller{
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, ClassNotFoundException, InstantiationException, IOException, IllegalAccessException {
 		
-		String sutDirectory = System.getProperty("user.dir")+"/src/SUT/";
+		String sutDirectory = System.getProperty("user.dir")+"/src/SUT";
 		String mutantDirectory = System.getProperty("user.dir")+"/src/Mutants";
 		File mutantFolder = new File(mutantDirectory);
 		
@@ -31,17 +30,6 @@ public class Controller{
 		//It is now time to run tests on the mutants as well as the original SUT
 		
 		Tester.testSUT(sutDirectory,mutantDirectory);
-
-		/*
-		File folder = new File(System.getProperty("user.dir")+"/src/SUT");
-		String[] listOfFiles = folder.list();
-		File[] otherList = folder.listFiles();
-		System.out.println(otherList[1].getName());
-		for(int i=0;i<listOfFiles.length;i++) {
-			System.out.println(listOfFiles[i].contains(".java"));
-			
-		}*/
-		
 	}
 
 }

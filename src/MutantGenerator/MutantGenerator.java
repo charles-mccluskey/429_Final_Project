@@ -25,7 +25,7 @@ public class MutantGenerator {
 				}
 			}
 			
-			reader = new BufferedReader(new FileReader(directory+fileName));//prep the input file
+			reader = new BufferedReader(new FileReader(directory+File.separator+fileName));//prep the input file
 			String line = reader.readLine();
 			String outputFile = System.getProperty("user.dir")+"/src/MutantGenerator/MutantList.txt";
 		    FileWriter fileWriter = new FileWriter(outputFile);//prep the output file
@@ -103,7 +103,7 @@ public class MutantGenerator {
 				int numMutants = mutants.length;
 				
 				for(int i=1;i<numMutants;i++) {//start offset since index 0 is original line
-					BufferedReader codeReader = new BufferedReader(new FileReader(directory+fileName));
+					BufferedReader codeReader = new BufferedReader(new FileReader(directory+File.separator+fileName));
 					String codeLine="";
 					//Now to set up the new mutated file
 					String output = System.getProperty("user.dir")+"/src/Mutants/Mutant"+numMutantFiles+".java";

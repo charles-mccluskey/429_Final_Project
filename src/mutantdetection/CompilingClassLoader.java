@@ -6,14 +6,10 @@ import java.nio.file.Files;
 
 /*This custom class loader compiles a .java file to a .class file and loads the class into memory.*/
 public class CompilingClassLoader extends ClassLoader {
-    private String directory;
+    private String fileDirectory;
 
-    /**
-     * @param packageClassDirectory the directory containing the class and it's packages.
-     *                       e.g. for "my\path\to\package1\package2\MyClass.java", classDirectory would be "my\path\to"
-     */
-    public CompilingClassLoader(String packageClassDirectory) {
-        this.directory = packageClassDirectory;
+    public CompilingClassLoader(String fileDirectory) {
+        this.fileDirectory = fileDirectory;
     }
 
     @Override
@@ -23,8 +19,10 @@ public class CompilingClassLoader extends ClassLoader {
     }
 
     private byte[] loadClassFromFile(String name) throws ClassNotFoundException {
-        compileJavaClass(directory +File.separator+name.replace('.', File.separatorChar));
-        File f = new File(directory +File.separator+name.replace('.', File.separatorChar)+".class");
+        String[] splitName = name.split(".");
+        String fileName = splitName[splitName.length - 1];
+        compileJavaClass(fileDirectory +File.separator+fileName+".java");
+        File f = new File(fileDirectory +File.separator+fileName+".class");
         if (!f.exists()) throw new ClassNotFoundException();
         try {
             return Files.readAllBytes(f.toPath());
@@ -35,7 +33,7 @@ public class CompilingClassLoader extends ClassLoader {
 
     /*Takes in a .java filename and compiles it to a .class file*/
     private void compileJavaClass(String fileName) {
-        ProcessBuilder pb = new ProcessBuilder("javac", fileName+".java");
+        ProcessBuilder pb = new ProcessBuilder("javac", fileName);
         try {
             Process process = pb.start();
             process.waitFor();

@@ -1,4 +1,4 @@
-package Manual_Control;
+package manualcontrol;
 
 public class Mutant1 {
 
