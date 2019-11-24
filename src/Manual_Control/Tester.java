@@ -81,6 +81,11 @@ class Tester {
                     if(mutantReturnValues.equals(sutReturnValues)) {
                         resultsFileBuffer.append(mutantClassName).append(" survived the test").append('\n');
                     } else {
+                    	for(int i=0;i<mutantReturnValues.size();i++) {
+                    		if(!mutantReturnValues.get(i).equals(sutReturnValues.get(i))) {
+                    			resultsFileBuffer.append(mutantClassName).append(" was KILLED by test vector ["+simMethodNames.get(i)+"] with input(s) "+simMethodArguments.get(i).toString()).append('\n');		
+                    		}
+                    	}
                         incMutantsKilled();
                     }
                 } catch (Exception e) {e.printStackTrace();}

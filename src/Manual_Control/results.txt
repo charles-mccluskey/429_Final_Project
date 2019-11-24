@@ -1,5 +1,24 @@
 Mutant1 survived the test
-Mutant3 survived the test
+Mutant12 was KILLED by test vector [AreaCircle] with input(s) [30.0]
+Mutant13 was KILLED by test vector [Circumference] with input(s) [67.0]
+Mutant11 was KILLED by test vector [AreaCircle] with input(s) [30.0]
+Mutant10 was KILLED by test vector [AreaCircle] with input(s) [30.0]
+Mutant21 was KILLED by test vector [Power] with input(s) [7.0, 5.0]
+Mutant22 was KILLED by test vector [Power] with input(s) [7.0, 5.0]
+Mutant20 was KILLED by test vector [Power] with input(s) [7.0, 5.0]
+Mutant8 was KILLED by test vector [AreaCircle] with input(s) [30.0]
 Mutant2 survived the test
+Mutant19 was KILLED by test vector [Power] with input(s) [7.0, 5.0]
+Mutant18 was KILLED by test vector [Circumference] with input(s) [67.0]
+Mutant17 was KILLED by test vector [Circumference] with input(s) [67.0]
+Mutant16 was KILLED by test vector [Circumference] with input(s) [67.0]
+Mutant15 was KILLED by test vector [Circumference] with input(s) [67.0]
+Mutant14 was KILLED by test vector [Circumference] with input(s) [67.0]
+Mutant7 was KILLED by test vector [AreaCircle] with input(s) [30.0]
+Mutant9 was KILLED by test vector [AreaCircle] with input(s) [30.0]
+Mutant6 was KILLED by test vector [AreaRectangle] with input(s) [25.0, 6.0]
+Mutant5 was KILLED by test vector [AreaRectangle] with input(s) [25.0, 6.0]
+Mutant4 was KILLED by test vector [AreaRectangle] with input(s) [25.0, 6.0]
+Mutant3 survived the test
 
 19 out of 22 mutants were killed.
