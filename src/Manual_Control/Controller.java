@@ -1,4 +1,4 @@
-package manualcontrol;
+package Manual_Control;
 
 import MutantGenerator.MutantGenerator;
 

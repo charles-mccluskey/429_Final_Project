@@ -1,4 +1,4 @@
-package manualcontrol;
+package Manual_Control;
 
 import mutantdetection.CompilingClassLoader;
 
@@ -40,22 +40,22 @@ class Tester {
 		//retrieve the sim file inputs and put into 2d array list
 		List<String> simMethodNames = new ArrayList<>();
 		List<List<String>> simMethodArguments = new ArrayList<>();
-		BufferedReader simReader = new BufferedReader(new FileReader(System.getProperty("user.dir")+"/src/Manual_Control/Simulation.txt"));
-		String method = simReader.readLine();
-		int counter=0;
-		while(method!=null) {
-			String[] parsedLine = method.split(",");
-			simMethodNames.add(parsedLine[0]);
-			simMethodArguments.add(new ArrayList<>());
-			for(int i=1;i<parsedLine.length;i++) {
-				simMethodArguments.get(counter).add(parsedLine[i].trim());
-			}
-			method=simReader.readLine();
-			counter++;
-		}
-		simReader.close();
+        try (BufferedReader simReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/src/Manual_Control/Simulation.txt"))) {
+            String method = simReader.readLine();
+            int counter = 0;
+            while (method != null) {
+                String[] parsedLine = method.split(",");
+                simMethodNames.add(parsedLine[0]);
+                simMethodArguments.add(new ArrayList<>());
+                for (int i = 1; i < parsedLine.length; i++) {
+                    simMethodArguments.get(counter).add(parsedLine[i].trim());
+                }
+                method = simReader.readLine();
+                counter++;
+            }
+        }
 
-		//now to run the SUT and note the results
+        //now to run the SUT and note the results
         CompilingClassLoader sccl = new CompilingClassLoader(sutDirectory);
         List<Object> sutReturnValues = runSimulation("SUT."+sutName, simMethodNames, simMethodArguments, sccl);
 
